@@ -13,10 +13,29 @@ public class LoginService
     @Autowired
     JdbcTemplate connection;
 
-    public boolean validate(String username, String password)
+    public boolean uservalidate(String user_username, String user_pass)
     {
         List<Map<String, Object>> response = connection.queryForList(
-                "SELECT * FROM users WHERE user_username = ? AND user_pass = ?", new Object[]{ username, password }
+                "SELECT * FROM users WHERE user_username = ? AND user_pass = ?", new Object[]{ user_username, user_pass }
+        );
+
+        return response.size() == 1;
+    }
+
+    public boolean managervalidate(String manager_username, String manager_pass)
+    {
+        List<Map<String, Object>> response = connection.queryForList(
+                "SELECT * FROM manager WHERE manager_username = ? AND manager_pass = ?",
+                new Object[]{manager_username, manager_pass}
+        );
+
+        return response.size() == 1;
+    }
+    public boolean publishervalidate(String publisher_username, String publisher_pass)
+    {
+        List<Map<String, Object>> response = connection.queryForList(
+                "SELECT * FROM publishers WHERE publisher_username = ? AND publisher_pass = ?",
+                new Object[]{publisher_username, publisher_pass}
         );
 
         return response.size() == 1;
