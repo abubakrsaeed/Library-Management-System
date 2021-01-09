@@ -32,5 +32,8 @@
 <br>
 <br>
 <a href="/publisherlogin">Login as a Publisher</a>
+<br>
+<br>
+<a href="/">Go back</a>
 </body>
 </html>

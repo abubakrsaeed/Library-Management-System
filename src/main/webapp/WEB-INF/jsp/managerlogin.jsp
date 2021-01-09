@@ -8,10 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Login to LMS</title>
+    <title>LMS Manager Account</title>
 </head>
 <body>
-<h3><u>Manager Login</u></h3>
+<h3><u>Manager Account</u></h3>
 <%
     String manager_username = (String) session.getAttribute("manager_username");
 
@@ -27,14 +27,32 @@
     <br>
     <br>
     <input type="submit" value ="Login"/>
+    <br>
+    <br>
+    <a href="/login">Go back</a>
 </form>
 <%
 }else{
 %>
-<p>You are logged in as: <%= manager_username %> </p>
+<p>You are logged in as: <%= manager_username %></p>
+<a href="/newpublisher">Create a new Publisher Account</a>
+<br>
+<br>
+<a href="/newbook">Add a new Book</a>
+<br>
+<br>
+<a href="/booksearch">Search Books</a>
+<br>
+<br>
 <a href="/bookInfo">Display Book information</a>
-<a href="/logout">Books currently borrowed</a>
-<a href="/PublisherSignUp">Create a new Publisher Account</a>
+<br>
+<br>
+<a href="/listoverdue">List Overdue Books</a>
+<br>
+<br>
+<a href="/borrowed">Borrowed Book Details</a>
+<br>
+<br>
 <a href="/logout">Logout</a>
 <%
     }

@@ -2,6 +2,7 @@ package edu.ozu.cs202project.controllers;
 
 import edu.ozu.cs202project.Salter;
 import edu.ozu.cs202project.services.LoginService;
+import edu.ozu.cs202project.services.newpublisherService;
 import edu.ozu.cs202project.services.signupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,6 +24,8 @@ public class AppController {
     LoginService service;
     @Autowired
     signupService signupService;
+    @Autowired
+    newpublisherService newpublisherService;
     @Autowired
     JdbcTemplate connection;
 
@@ -116,6 +119,21 @@ public class AppController {
         }
 
         return "userlogin";
+    }
+
+    @GetMapping("/newpublisher")
+    public String newpublisher(ModelMap model){
+        return "newpublisher";
+    }
+
+    @PostMapping("/newpublisher")
+    public String newpublisher(@RequestParam String publisher_name, @RequestParam String publisher_username, @RequestParam String publisher_pass, @RequestParam String publisher_phone){
+        if (newpublisherService.newpublisher(publisher_name, publisher_username, publisher_pass, publisher_phone))
+        {
+            return "newpublisher";
+        }
+
+        return "newpublisher";
     }
 
     //logout mapping

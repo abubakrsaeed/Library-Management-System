@@ -12,7 +12,7 @@
 </head>
 <body>
 <h3><u>User Sign Up</u></h3>
-<p><strong>Create an LMS User Account</strong></p>
+<p><strong>Create a new LMS User Account</strong></p>
 <%
     String name = (String) session.getAttribute("user_name");
     if(name == null)
@@ -24,25 +24,26 @@
         <tr>
         </tr>
         <tr>
-            <td>Name : <input type = "text" name="user_name" /></td>
+            <td>Name  : <input type = "text" name="user_name" required/></td>
         </tr>
         <tr>
-            <td>Phone Number : <input type = "text" pattern="[0-9]{11}" name="user_phone"/></td>
+            <td>Username : <input type = "text" name="user_username" required/></td>
         </tr>
         <tr>
-            <td>Username : <input type = "text" name="user_username" /></td>
+            <td>Password : <input type = "password" name="user_pass" required/></td>
         </tr>
         <tr>
-            <td>Password : <input type = "password" name="user_pass"/></td>
+            <td>Phone Number (11 digits) : <input type = "text" pattern="[0-9]{11}" name="user_phone" required/></td>
         </tr>
     </table>
     <br>
-    <input type="submit" value ="Sign Up"/>
+    <input type="submit" value ="Sign Up" onclick="return confirm('New user account has been created!');">
+    <br>
+    <p>Already have an account? <a href="/login">Login</a>.</p>
 </form>
 <%
 }else{
 %>
-<p>New User Account created successfully!</p>
 <%
     }
 %>

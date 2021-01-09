@@ -8,10 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Login to LMS</title>
+    <title>LMS Publisher Account</title>
 </head>
 <body>
-<h3><u>Publisher Login</u></h3>
+<h3><u>Publisher Account</u></h3>
 <%
     String publisher_username = (String) session.getAttribute("publisher_username");
     if(publisher_username == null)
@@ -26,6 +26,9 @@
     <br>
     <br>
     <input type="submit" value ="Login"/>
+    <br>
+    <br>
+    <a href="/login">Go back</a>
 </form>
 <%
 }else{
