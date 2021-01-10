@@ -41,16 +41,10 @@
 <a href="/newbook">Add a new Book</a>
 <br>
 <br>
-<a href="/booksearch">Search Books</a>
+<a href="/searchbook">Search Books</a>
 <br>
 <br>
-<a href="/bookInfo">Display Book information</a>
-<br>
-<br>
-<a href="/listoverdue">List Overdue Books</a>
-<br>
-<br>
-<a href="/borrowed">Borrowed Book Details</a>
+<a href="/borrowinfo">Borrowed Book Details</a>
 <br>
 <br>
 <a href="/logout">Logout</a>

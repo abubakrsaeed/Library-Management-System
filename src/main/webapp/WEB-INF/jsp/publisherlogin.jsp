@@ -34,7 +34,8 @@
 }else{
 %>
 <p>You are logged in as: <%= publisher_username %> </p>
-<a href="/bookInfo">Display Book Information</a>
+<a href="/searchbook">Search Books</a>
+<br><br>
 <a href="/logout">Logout</a>
 <%
     }

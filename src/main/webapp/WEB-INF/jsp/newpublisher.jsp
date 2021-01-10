@@ -12,12 +12,6 @@
 </head>
 <body>
 <p><strong>Create a new LMS Publisher Account</strong></p>
-<%
-    String name = (String) session.getAttribute("publisher_name");
-    if(name == null)
-    {
-%>
-<p style="color: red">${errorMessage}</p>
 <form method = "post" >
     <table>
         <tr>
@@ -41,11 +35,5 @@
     <br>
     <a href="/managerlogin">Go back</a>
 </form>
-<%
-}else{
-%>
-<%
-    }
-%>
 </body>
 </html>

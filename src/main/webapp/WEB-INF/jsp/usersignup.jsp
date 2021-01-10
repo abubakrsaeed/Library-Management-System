@@ -13,12 +13,6 @@
 <body>
 <h3><u>User Sign Up</u></h3>
 <p><strong>Create a new LMS User Account</strong></p>
-<%
-    String name = (String) session.getAttribute("user_name");
-    if(name == null)
-    {
-%>
-<p style="color: red">${errorMessage}</p>
 <form method = "post" >
     <table>
         <tr>
@@ -41,11 +35,5 @@
     <br>
     <p>Already have an account? <a href="/login">Login</a>.</p>
 </form>
-<%
-}else{
-%>
-<%
-    }
-%>
 </body>
 </html>
