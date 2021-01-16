@@ -47,6 +47,9 @@
 <a href="/borrowinfo">Borrowed Book Details</a>
 <br>
 <br>
+<a href="/removebook">removeBook</a>
+<br>
+<br>
 <a href="/logout">Logout</a>
 <%
     }
