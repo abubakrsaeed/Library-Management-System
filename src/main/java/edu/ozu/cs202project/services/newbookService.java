@@ -18,4 +18,25 @@ public class newbookService {
 
         return i == 1;
     }
+     public boolean removebook(String book_title) {
+        int i = connection.update(
+                "DELETE FROM books WHERE book_title = ?",
+                book_title
+        );
+
+        return i == 1;
+    }
+    public boolean borrowBook(String book_id,String user_username,String return_date) {
+        int i = connection.update(
+                "UPDATE borrower_details SET book_id = ?,return_date = ? WHERE user_username = ?",
+                new Object[]{book_id,return_date,user_username}
+        );
+//        int j = connection.update(
+//                "UPDATE borrower_details SET return_date = ? WHERE user_username = ?",
+//                new Object[]{return_date,user_username}
+//        );
+
+
+        return i == 1;
+    }
 }
