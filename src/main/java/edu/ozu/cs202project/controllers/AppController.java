@@ -315,7 +315,7 @@ public class AppController {
                          @RequestParam String return_date
     )
     {
-        if (!borrowService.borrowBook(book_id,user_username,return_date))
+        if (!newbookService.borrowBook(book_id,user_username,return_date))
         {
             return "borrow";
         }
