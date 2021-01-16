@@ -38,6 +38,11 @@
 <a href="/searchbook">Search Books</a>
 <br> <br>
 <a href="/logout">Logout</a>
+<br>
+<a href="/borrow">Borrow a book</a>
+<br>
+<a href="/Showpublishers">publishers</a>
+<br>
 <%
     }
 %>
