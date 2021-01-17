@@ -18,9 +18,11 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
 
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
-@SessionAttributes({ "user_username", "level", "manager_username","publisher_username", "book_title", "searchbook", "borrowinfo" })
+@SessionAttributes({ "user_username", "level", "manager_username","publisher_username", "book_title", "searchbook", "borrowinfo", "book_id", "booklist","borrow","searchpublishers","publisher_name" })
 public class AppController {
 
     @Autowired
@@ -32,7 +34,11 @@ public class AppController {
     @Autowired
     newbookService newbookService;
     @Autowired
+    newbookService borrowService;
+    @Autowired
     JdbcTemplate connection;
+
+
 
     //Index Mapping
     @GetMapping("/")
@@ -56,8 +62,8 @@ public class AppController {
 
         //password = Salter.salt(password, "CS202Project");
         if (!service.uservalidate(user_username, user_pass)){
-             model.put("errorMessage", "Incorrect username and/or password");
-             return "userlogin";
+            model.put("errorMessage", "Incorrect username and/or password");
+            return "userlogin";
         }
 
         model.put("user_username", user_username);
@@ -70,7 +76,7 @@ public class AppController {
         return "managerlogin";
     }
     @PostMapping("/managerlogin")
-    public String managerlogin(ModelMap model,@RequestParam String manager_username, @RequestParam String manager_pass)
+    public String managerlogin(ModelMap model, @RequestParam String manager_username, @RequestParam String manager_pass)
     {
         //password = Salter.salt(password, "CS202Project");
 
@@ -129,6 +135,8 @@ public class AppController {
         return "userlogin";
     }
 
+
+
     @GetMapping("/newpublisher")
     public String newpublisher(ModelMap model){
         return "newpublisher";
@@ -147,6 +155,7 @@ public class AppController {
         return "newpublisher";
     }
 
+    //Add new book
     @GetMapping("/newbook")
     public String newbook(ModelMap model)
     {
@@ -171,6 +180,7 @@ public class AppController {
         return "newbook";
     }
 
+    //search books
     @GetMapping("/searchbook")
     public String searchbook(ModelMap model,
                              @RequestParam(required = false) String title,
@@ -251,6 +261,129 @@ public class AppController {
 
         return "borrowinfo";
     }
+    @GetMapping("/removebook")
+    public String removebook(ModelMap model)
+    {
+        List<String[]> data = connection.query("SELECT * FROM books",
+                (row, index) -> {
+                    return new String[]{ row.getString("book_id"),
+                            row.getString("book_title"),
+                            row.getString("book_author"),
+                            row.getString("book_genre"),
+                            row.getString("book_topics"),
+                            row.getString("publisher_id"),
+                            row.getString("year_published"),
+                            row.getString("book_stock"),
+                            row.getString("book_available")};
+                });
+
+        model.addAttribute("booklist", data.toArray(new String[0][9]));
+
+        return "removebook";
+    }
+    @PostMapping("/removebook")
+    public String removebook(ModelMap model,
+
+                             @RequestParam String book_title
+    )
+    {
+        if (!newbookService.removebook(book_title))
+        {
+            return "removebook";
+        }
+        model.put("book_title", book_title);
+        return "removebook";
+    }
+
+    @GetMapping("/borrow")
+    public String borrow(ModelMap model)
+    {
+        List<String[]> data = connection.query("SELECT * FROM books",
+                (row, index) -> {
+                    return new String[]{ row.getString("book_id"),
+                            row.getString("book_title"),
+                            row.getString("book_author"),
+                            row.getString("book_genre"),
+                            row.getString("book_topics"),
+                            row.getString("publisher_id"),
+                            row.getString("year_published"),
+                            row.getString("book_stock"),
+                            row.getString("book_available")};
+                });
+
+        model.addAttribute("borrow", data.toArray(new String[0][9]));
+
+        return "borrow";
+    }
+    @PostMapping("/borrow")
+    public String borrow(ModelMap model,
+                         @RequestParam String user_username,
+                         @RequestParam String book_id,
+                         @RequestParam String return_date
+    )
+    {
+        if (!newbookService.borrowBook(book_id,user_username,return_date))
+        {
+            return "borrow";
+        }
+        model.put("book_id", book_id);
+        return "borrow";
+    }
+
+
+    //Search Publishers
+    @GetMapping("/searchpublishers")
+    public String searchpublishers(ModelMap model,
+                             @RequestParam(required = false) String publishers,
+                             @RequestParam(required = false) String genre,
+                             @RequestParam(required = false) String isAvailable)
+    {
+
+        String query = "SELECT publishers.publisher_id, publishers.publisher_name, books.book_id, books.book_genre, books.book_available FROM books INNER JOIN publishers ON books.publisher_id=publishers.publisher_id";
+
+
+        if(publishers != null){
+            query += " WHERE publisher_name LIKE LOWER('%" + publishers + "%')";
+        }
+
+        if(genre != null){
+            query += " AND book_genre LIKE LOWER('%" + genre + "%')";
+        }
+
+        if(isAvailable != null && !isAvailable.isEmpty()){
+            System.out.println("isAvailable:" + isAvailable);
+            if(isAvailable.equals("true")){
+                query += " AND book_available = 'yes'";
+            }
+            else if(isAvailable.equals("false"))
+            {
+                query += " AND book_available = 'no'";
+            }
+
+        }
+
+        List<String[]> data = connection.query(query,
+                (row, index) -> {
+                    return new String[]{ row.getString("publisher_id"),
+                            row.getString("publisher_name"),
+                            row.getString("book_id"),
+                            row.getString("book_genre"),
+                            row.getString("book_available") };
+                });
+
+        model.addAttribute("searchpublishers", data.toArray(new String[0][4]));
+
+        return "searchpublishers";
+    }
+
+
+
+
+
+
+
+
+
 
 
     //logout mapping
@@ -262,4 +395,8 @@ public class AppController {
         return "redirect:/login";
 
     }
+
+
+
 }
+
