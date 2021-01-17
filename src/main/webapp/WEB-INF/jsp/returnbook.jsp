@@ -11,12 +11,14 @@
     <title>LMS</title>
 </head>
 <body>
-<h3>RETURN BOOK</h3>
+<h3>Return Book</h3>
+
 
 <form method = "post" >
     Book ID : <input type = "text" name="book_id"/>
     <br><br>
-    <input type="submit" value ="Return"/>
+    <input type="submit" value ="Return"  onclick="return confirm('Book returned');"/>
+
 </form>
 </body>
 </html>
