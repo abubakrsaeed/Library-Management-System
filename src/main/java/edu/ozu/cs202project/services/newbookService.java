@@ -18,12 +18,8 @@ public class newbookService {
 
         return i == 1;
     }
-<<<<<<< HEAD
 
     public boolean removebook(String book_title) {
-=======
-     public boolean removebook(String book_title) {
->>>>>>> fd304bf8feef3e75813f3c042c68810c3ce8cdab
         int i = connection.update(
                 "DELETE FROM books WHERE book_title = ?",
                 book_title
@@ -44,8 +40,4 @@ public class newbookService {
 
         return i == 1;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> fd304bf8feef3e75813f3c042c68810c3ce8cdab

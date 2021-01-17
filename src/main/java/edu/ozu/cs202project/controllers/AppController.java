@@ -22,11 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
-<<<<<<< HEAD
 @SessionAttributes({ "user_username", "level", "manager_username","publisher_username", "book_title", "searchbook", "borrowinfo", "book_id", "booklist","borrow","searchpublishers","publisher_name" })
-=======
-@SessionAttributes({ "user_username", "level", "manager_username","publisher_username", "book_title", "searchbook", "borrowinfo", "book_id", "booklist","borrow" })
->>>>>>> fd304bf8feef3e75813f3c042c68810c3ce8cdab
 public class AppController {
 
     @Autowired
@@ -37,8 +33,6 @@ public class AppController {
     newpublisherService newpublisherService;
     @Autowired
     newbookService newbookService;
-     @Autowired
-    newbookService borrowService;
     @Autowired
     newbookService borrowService;
     @Autowired
@@ -382,83 +376,69 @@ public class AppController {
         return "searchpublishers";
     }
 
+    //Return book
 
-
-
-
-
-
-
-
-
-@GetMapping("/removebook")
-    public String removebook(ModelMap model)
+    @GetMapping("/returnbook")
+    public String returnbook(ModelMap model)
     {
-        List<String[]> data = connection.query("SELECT * FROM books",
-                (row, index) -> {
-                    return new String[]{ row.getString("book_id"),
-                            row.getString("book_title"),
-                            row.getString("book_author"),
-                            row.getString("book_genre"),
-                            row.getString("book_topics"),
-                            row.getString("publisher_id"),
-                            row.getString("year_published"),
-                            row.getString("book_stock"),
-                            row.getString("book_available")};
-                });
-
-        model.addAttribute("booklist", data.toArray(new String[0][9]));
-
-        return "removebook";
+        return "returnbook";
     }
-    @PostMapping("/removebook")
-    public String removebook(ModelMap model,
-
-                          @RequestParam String book_title
-                          )
+    @PostMapping("/returnbook")
+    public String returnbook(ModelMap model, @RequestParam int book_id)
     {
-        if (!newbookService.removebook(book_title))
-        {
-            return "removebook";
-        }
-        model.put("book_title", book_title);
-        return "removebook";
+        model.put("book_id",book_id);
+        connection.update(
+                "UPDATE books SET status='Available' where book_id ='"+book_id+"'");
+
+        return "returnbook";
     }
 
-    @GetMapping("/borrow")
-    public String borrow(ModelMap model)
+    //Assign book
+
+    @GetMapping("/assignbook")
+    public String assignbook(ModelMap model)
     {
-        List<String[]> data = connection.query("SELECT * FROM books",
-                (row, index) -> {
-                    return new String[]{ row.getString("book_id"),
-                            row.getString("book_title"),
-                            row.getString("book_author"),
-                            row.getString("book_genre"),
-                            row.getString("book_topics"),
-                            row.getString("publisher_id"),
-                            row.getString("year_published"),
-                            row.getString("book_stock"),
-                            row.getString("book_available")};
-                });
-
-        model.addAttribute("borrow", data.toArray(new String[0][9]));
-
-        return "borrow";
+        return "assignbook";
     }
-    @PostMapping("/borrow")
-    public String borrow(ModelMap model,
-                         @RequestParam String user_username,
-                         @RequestParam String book_id,
-                         @RequestParam String return_date
-    )
-    {
-        if (!newbookService.borrowBook(book_id,user_username,return_date))
-        {
-            return "borrow";
-        }
+    @PostMapping("/assignbook")
+    public String assignbook(ModelMap model,@RequestParam int user_id, @RequestParam int book_id) {
         model.put("book_id", book_id);
-        return "borrow";
+        LocalDateTime localDate = LocalDateTime.now();
+        LocalDateTime borrowed_on = localDate;
+        LocalDateTime due_date = localDate.plusDays(30);
+        connection.update(
+                "UPDATE books SET status='Borrowed' where book_id ='" + book_id + "'");
+        connection.update(
+                "INSERT INTO borrower_details(user_id, book_id, borrowed_on, due_date) values(?,?,?,?)", new Object[]{user_id, book_id, borrowed_on,due_date}
+                );
+
+        return "assignbook";
     }
+
+    //Un-Assign book
+    @GetMapping("/unassignbook")
+    public String unassignbook(ModelMap model)
+    {
+        return "unassignbook";
+    }
+    @PostMapping("/unassignbook")
+    public String unassignbook(ModelMap model,@RequestParam int user_id, @RequestParam int book_id)
+    {
+
+        connection.update(
+                "UPDATE books SET status='Not Borrowed' where book_id ='"+book_id+"'");
+
+        return "unassignbook";
+    }
+
+
+
+
+
+
+
+
+
     //logout mapping
     @GetMapping("/logout")
     public String logout(ModelMap model, WebRequest request, SessionStatus session){

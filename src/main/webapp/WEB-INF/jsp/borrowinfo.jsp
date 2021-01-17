@@ -41,7 +41,5 @@
         }
     %>
 </table>
-  <br>
-  <a href="/managerlogin">Go back</a>
 </body>
 </html>

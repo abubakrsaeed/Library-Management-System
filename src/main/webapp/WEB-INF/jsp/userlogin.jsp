@@ -39,14 +39,11 @@
 <br> <br>
 <a href="/borrow">Borrow a book</a>
 <br> <br>
+<a href="/returnbook">Return a Book</a>
+<br> <br>
 <a href="/searchpublishers">Search Publishers</a>
 <br> <br>
 <a href="/logout">Logout</a>
-<br>
-<a href="/borrow">Borrow a book</a>
-<br>
-<a href="/Showpublishers">publishers</a>
-<br>
 <%
     }
 %>
