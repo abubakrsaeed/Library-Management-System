@@ -47,11 +47,17 @@
 <a href="/borrowinfo">Borrowed Book Details</a>
 <br>
 <br>
+<<<<<<< HEAD
 <a href="/removebook">Remove Books</a>
 <br>
 <br>
 <a href="/searchpublishers">Search Publishers</a>
 <br><br>
+=======
+<a href="/removebook">removeBook</a>
+<br>
+<br>
+>>>>>>> fd304bf8feef3e75813f3c042c68810c3ce8cdab
 <a href="/logout">Logout</a>
 <%
     }

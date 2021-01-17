@@ -22,7 +22,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
+<<<<<<< HEAD
 @SessionAttributes({ "user_username", "level", "manager_username","publisher_username", "book_title", "searchbook", "borrowinfo", "book_id", "booklist","borrow","searchpublishers","publisher_name" })
+=======
+@SessionAttributes({ "user_username", "level", "manager_username","publisher_username", "book_title", "searchbook", "borrowinfo", "book_id", "booklist","borrow" })
+>>>>>>> fd304bf8feef3e75813f3c042c68810c3ce8cdab
 public class AppController {
 
     @Autowired
@@ -33,6 +37,8 @@ public class AppController {
     newpublisherService newpublisherService;
     @Autowired
     newbookService newbookService;
+     @Autowired
+    newbookService borrowService;
     @Autowired
     newbookService borrowService;
     @Autowired
@@ -385,7 +391,74 @@ public class AppController {
 
 
 
+@GetMapping("/removebook")
+    public String removebook(ModelMap model)
+    {
+        List<String[]> data = connection.query("SELECT * FROM books",
+                (row, index) -> {
+                    return new String[]{ row.getString("book_id"),
+                            row.getString("book_title"),
+                            row.getString("book_author"),
+                            row.getString("book_genre"),
+                            row.getString("book_topics"),
+                            row.getString("publisher_id"),
+                            row.getString("year_published"),
+                            row.getString("book_stock"),
+                            row.getString("book_available")};
+                });
 
+        model.addAttribute("booklist", data.toArray(new String[0][9]));
+
+        return "removebook";
+    }
+    @PostMapping("/removebook")
+    public String removebook(ModelMap model,
+
+                          @RequestParam String book_title
+                          )
+    {
+        if (!newbookService.removebook(book_title))
+        {
+            return "removebook";
+        }
+        model.put("book_title", book_title);
+        return "removebook";
+    }
+
+    @GetMapping("/borrow")
+    public String borrow(ModelMap model)
+    {
+        List<String[]> data = connection.query("SELECT * FROM books",
+                (row, index) -> {
+                    return new String[]{ row.getString("book_id"),
+                            row.getString("book_title"),
+                            row.getString("book_author"),
+                            row.getString("book_genre"),
+                            row.getString("book_topics"),
+                            row.getString("publisher_id"),
+                            row.getString("year_published"),
+                            row.getString("book_stock"),
+                            row.getString("book_available")};
+                });
+
+        model.addAttribute("borrow", data.toArray(new String[0][9]));
+
+        return "borrow";
+    }
+    @PostMapping("/borrow")
+    public String borrow(ModelMap model,
+                         @RequestParam String user_username,
+                         @RequestParam String book_id,
+                         @RequestParam String return_date
+    )
+    {
+        if (!newbookService.borrowBook(book_id,user_username,return_date))
+        {
+            return "borrow";
+        }
+        model.put("book_id", book_id);
+        return "borrow";
+    }
     //logout mapping
     @GetMapping("/logout")
     public String logout(ModelMap model, WebRequest request, SessionStatus session){
