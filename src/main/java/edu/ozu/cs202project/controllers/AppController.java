@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
-@SessionAttributes({ "user_username", "level", "manager_username","publisher_username", "book_title", "searchbook", "borrowinfo", "book_id", "booklist","borrow","searchpublishers","publisher_name" })
+@SessionAttributes({ "user_username", "level", "manager_username","publisher_username", "book_title", "searchbook", "borrowinfo", "book_id", "booklist","borrow","searchpublishers","publisher_name", "user_id" })
 public class AppController {
 
     @Autowired
@@ -172,7 +172,7 @@ public class AppController {
                           @RequestParam int book_stock,
                           @RequestParam String book_available)
     {
-        if (!newbookService.newbook(book_title, book_author, book_genre, book_topics, publisher_id, year_published, book_stock, book_available))
+        if (!newbookService.newbook(book_title, book_author, book_genre, book_topics, publisher_id, year_published, book_available))
         {
             return "newbook";
         }
@@ -234,11 +234,10 @@ public class AppController {
                             row.getString("book_topics"),
                             row.getString("publisher_id"),
                             row.getString("year_published"),
-                            row.getString("book_stock"),
                             row.getString("book_available") };
                 });
 
-        model.addAttribute("searchbook", data.toArray(new String[0][8]));
+        model.addAttribute("searchbook", data.toArray(new String[0][7]));
 
         return "searchbook";
     }
@@ -384,11 +383,15 @@ public class AppController {
         return "returnbook";
     }
     @PostMapping("/returnbook")
-    public String returnbook(ModelMap model, @RequestParam int book_id)
+    public String returnbook(ModelMap model ,@RequestParam int book_id)
     {
         model.put("book_id",book_id);
+        LocalDateTime localDate = LocalDateTime.now();
+        LocalDateTime return_date = localDate;
         connection.update(
-                "UPDATE books SET status='Available' where book_id ='"+book_id+"'");
+                "UPDATE books SET status='Not Borrowed' where book_id ='"+book_id+"'");
+        connection.update("UPDATE borrower_details SET return_date='"+localDate+"' where book_id ='"+book_id+"'"
+        );
 
         return "returnbook";
     }
